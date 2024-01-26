@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace FileOps.Core;
 
@@ -13,6 +14,7 @@ internal record JsonFileOpsConfiguration
             {
                 PropertyNameCaseInsensitive = true
             };
+            options.Converters.Add(new JsonStringEnumConverter());
         }
 
         return json.Deserialize<JsonFileOpsConfiguration>(options);

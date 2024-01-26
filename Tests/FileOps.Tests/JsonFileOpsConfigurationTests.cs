@@ -13,17 +13,17 @@ public class JsonFileOpsConfigurationTests
     [Test]
     public void JsonFileOpsConfiguration_Parse()
     {
-        var json = @"{
+        const string json = @"{
   ""rootPath"": ""C:\\Source\\Repos"",
   ""move"": [
     {
-      ""directoryResolution"": ""UseExistingOrCreateNew"",
+      ""directoryResolution"": ""CreateDirectories"",
       ""description"": ""Moves the generated LIC file compiled by the build agent"",
       ""enabled"": true,
       ""to"": ""output"",
       ""pathResolution"": ""relative"",
       ""rootPath"": ""JsonExtractor.Web"",
-      ""failureAction"": ""fail"",
+      ""failureAction"": ""AbortOnError"",
       ""files"": [
         ""cypress.lic""
       ]
@@ -31,7 +31,7 @@ public class JsonFileOpsConfigurationTests
   ],
   ""copy"": [
     {
-      ""directoryResolution"": ""UseExistingOrCreateNew"",
+      ""directoryResolution"": ""CreateDirectories"",
       ""description"": ""Copy content files to the web root"",
       ""enabled"": true,
       ""to"": ""wwwroot"",
