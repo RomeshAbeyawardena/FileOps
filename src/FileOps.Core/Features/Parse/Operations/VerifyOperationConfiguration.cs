@@ -1,11 +1,11 @@
-﻿namespace FileOps.Core;
+﻿namespace FileOps.Core.Features.Parse.Operations;
 
 internal record VerifyOperationConfiguration : OperationConfigurationBase, IValidationOperationConfiguration
 {
     public VerifyOperationConfiguration()
         : base(Operation.Verify)
     {
-        
+
     }
     public bool Exists { get; set; }
     public string? RootPath { get; set; }

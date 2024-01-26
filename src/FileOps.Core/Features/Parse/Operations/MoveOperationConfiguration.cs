@@ -1,10 +1,10 @@
-﻿namespace FileOps.Core;
+﻿namespace FileOps.Core.Features.Parse.Operations;
 
 internal record MoveOperationConfiguration : OperationConfigurationBase, IFileTransferOperationConfiguration
 {
     public MoveOperationConfiguration() : base(Operation.Move)
     {
-        
+
     }
 
     public string? To { get; set; }
