@@ -5,17 +5,23 @@ namespace FileOps.Core;
 
 internal record JsonFileOpsConfiguration
 {
+    public static JsonSerializerOptions GetDefault(JsonSerializerOptions? options = null)
+    {
+        var opts = options == null 
+            ? new JsonSerializerOptions() 
+            : new JsonSerializerOptions(options)
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        opts.Converters.Add(new JsonStringEnumConverter());
+        return opts;
+    }
+
     public static FileOpsConfiguration? Parse(JsonDocument json, 
         JsonSerializerOptions? options = null)
     {
-        if (options == null)
-        {
-            options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            options.Converters.Add(new JsonStringEnumConverter());
-        }
+        options = GetDefault(options);
 
         return json.Deserialize<JsonFileOpsConfiguration>(options);
     }

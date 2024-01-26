@@ -59,5 +59,6 @@ public class JsonFileOpsConfigurationTests
         using var jsonDocument = JsonDocument.Parse(json);
         FileOpsConfiguration? configuration = JsonFileOpsConfiguration.Parse(jsonDocument);
         Assert.That(configuration, Is.Not.Null);
+        Assert.That(configuration.RootPath, Is.EqualTo("C:\\Source\\Repos"));
     }
 }
