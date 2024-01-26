@@ -2,7 +2,12 @@
 
 internal record CopyOperationConfiguration : OperationConfigurationBase, IFileTransferOperationConfiguration
 {
-    public string? To { get; }
-    public string? RootPath { get; }
-    public IEnumerable<string>? Files { get; }
+    public CopyOperationConfiguration() : base(Operation.Copy)
+    {
+        
+    }
+
+    public string? To { get; set; }
+    public string? RootPath { get; set; }
+    public IEnumerable<string>? Files { get; set; }
 }

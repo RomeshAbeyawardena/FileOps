@@ -2,7 +2,12 @@
 
 internal record VerifyOperationConfiguration : OperationConfigurationBase, IValidationOperationConfiguration
 {
-    public bool Exists { get; }
-    public string? RootPath { get; }
-    public IEnumerable<string>? Files { get; }
+    public VerifyOperationConfiguration()
+        : base(Operation.Verify)
+    {
+        
+    }
+    public bool Exists { get; set; }
+    public string? RootPath { get; set; }
+    public IEnumerable<string>? Files { get; set; }
 }

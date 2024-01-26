@@ -2,9 +2,15 @@
 
 internal abstract record OperationConfigurationBase : IOperationConfiguration
 {
-    public DirectoryResolution DirectoryResolution { get; }
-    public string? Description { get; }
-    public bool Enabled { get; }
-    public PathResolution PathResolution { get; }
-    public FailureAction FailureAction { get; }
+    public OperationConfigurationBase(Operation operation)
+    {
+        Operation = operation;
+    }
+
+    public DirectoryResolution DirectoryResolution { get; set; }
+    public string? Description { get; set; }
+    public bool Enabled { get; set; }
+    public PathResolution PathResolution { get; set; }
+    public FailureAction FailureAction { get; set; }
+    public Operation Operation { get; set; }
 }
