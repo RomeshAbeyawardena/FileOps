@@ -40,14 +40,6 @@ internal record JsonFileOpsConfiguration
     public IEnumerable<VerifyOperationConfiguration>? Verify { get; set; }
 }
 
-internal record FileOpsConfiguration
-{
-    public string? RootPath { get; set; }
-    public IEnumerable<IFileTransferOperationConfiguration>? Move { get; set; }
-    public IEnumerable<IFileTransferOperationConfiguration>? Copy { get; set; }
-    public IEnumerable<IValidationOperationConfiguration>? Verify { get; set; }
-}
-
 internal enum DirectoryResolution
 {
     CreateDirectories,
