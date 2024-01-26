@@ -4,9 +4,18 @@ namespace FileOps.Core;
 
 internal record JsonFileOpsConfiguration
 {
-    public static FileOpsConfiguration? Parse(JsonDocument json)
+    public static FileOpsConfiguration? Parse(JsonDocument json, 
+        JsonSerializerOptions? options = null)
     {
-        return json.Deserialize<JsonFileOpsConfiguration>();
+        if (options == null)
+        {
+            options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+        }
+
+        return json.Deserialize<JsonFileOpsConfiguration>(options);
     }
 
     public string? RootPath { get; set; }
