@@ -1,7 +1,4 @@
-﻿using FileOps.Core.Features.Parse.Operations;
-using FileOps.Core.FileOps.Core.Features.Parse.FileOps.Core.Features.Parse;
-using FileOps.Core.Operations;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace FileOps.Core;
 
@@ -94,4 +91,34 @@ internal interface IFileTransferOperationConfiguration : IFileOperationConfigura
 internal interface IValidationOperationConfiguration : IFileOperationConfiguration
 {
     bool Exists { get; }
+}
+
+internal record MoveOperationConfiguration : OperationConfigurationBase, IFileTransferOperationConfiguration
+{
+    public string? To { get; }
+    public string? RootPath { get; }
+    public IEnumerable<string>? Files { get; }
+}
+
+internal record CopyOperationConfiguration : OperationConfigurationBase, IFileTransferOperationConfiguration
+{
+    public string? To { get; }
+    public string? RootPath { get; }
+    public IEnumerable<string>? Files { get; }
+}
+
+internal record VerifyOperationConfiguration : OperationConfigurationBase, IValidationOperationConfiguration
+{
+    public bool Exists { get; }
+    public string? RootPath { get; }
+    public IEnumerable<string>? Files { get; }
+}
+
+internal abstract record OperationConfigurationBase : IOperationConfiguration
+{
+    public DirectoryResolution DirectoryResolution { get; }
+    public string? Description { get; }
+    public bool Enabled { get; }
+    public PathResolution PathResolution { get; }
+    public FailureAction FailureAction { get; }
 }
