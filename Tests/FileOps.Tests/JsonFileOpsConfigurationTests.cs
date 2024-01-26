@@ -16,6 +16,6 @@ public class JsonFileOpsConfigurationTests
         var json = "";
         using var jsonDocument = JsonDocument.Parse(json);
         FileOpsConfiguration? configuration = JsonFileOpsConfiguration.Parse(jsonDocument);
-        Assert.Pass();
+        Assert.That(configuration, Is.Not.Null);
     }
 }
