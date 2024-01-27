@@ -1,15 +1,13 @@
 ﻿namespace FileOps.Core.Features.Parse.Operations;
 
-internal abstract class OperationExecutorBase<TOperationConfiguration>
-    : OperationExecutorBase
+internal abstract class OperationExecutorBase<TOperationConfiguration>(Operation operation)
+    : OperationExecutorBase(operation)
     where TOperationConfiguration : IOperationConfiguration
 {
-    public OperationExecutorBase(Operation operation) : base(operation) { }
-
     public override bool CanExecute(IOperationConfiguration configuration)
     {
         return configuration is TOperationConfiguration operationConfiguration
-            && base.CanExecute(configuration) && this.CanExecute(configuration);
+            && base.CanExecute(configuration) && this.CanExecute(operationConfiguration);
     }
 
     public override Task Execute(IOperationConfiguration configuration, 

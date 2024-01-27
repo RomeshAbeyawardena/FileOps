@@ -1,13 +1,8 @@
 ﻿namespace FileOps.Core.Features.Parse.Operations;
 
-internal abstract class OperationExecutorBase : IOperationExecutor
+internal abstract class OperationExecutorBase(Operation operation) : IOperationExecutor
 {
-    public OperationExecutorBase(Operation operation)
-    {
-        Operation = operation;
-    }
-
-    public Operation Operation { get; }
+    public Operation Operation { get; } = operation;
 
     public virtual bool CanExecute(IOperationConfiguration configuration)
     {
