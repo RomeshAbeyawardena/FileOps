@@ -1,9 +1,36 @@
-﻿namespace FileOps.Core.Features.Parse.Operations;
+﻿using Microsoft.Extensions.FileProviders;
 
-internal class CopyOperationExecutor(OperationLedger operationLedgerEntries) : OperationExecutorBase<CopyOperationConfiguration>(operationLedgerEntries, Operation.Copy)
+namespace FileOps.Core.Features.Parse.Operations;
+
+internal class CopyOperationExecutor(OperationLedger operationLedgerEntries, IFileProvider fileProvider) : OperationExecutorBase<CopyOperationConfiguration>(operationLedgerEntries, Operation.Copy)
 {
-    public override Task Execute(CopyOperationConfiguration configuration, CancellationToken cancellationToken)
+    public override async Task Execute(CopyOperationConfiguration configuration, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        try
+        {
+            if (configuration.PathResolution == PathResolution.Relative
+                && string.IsNullOrWhiteSpace(configuration.RootPath))
+            {
+                throw new NullReferenceException("Root path must be specified");
+            }
+
+            if (string.IsNullOrWhiteSpace(configuration.To))
+            {
+                throw new NullReferenceException("Destination (To) not specified");
+            }
+
+            if (configuration.DirectoryResolution == DirectoryResolution.CreateDirectories
+                && !Directory.Exists(configuration.To))
+            {
+                Directory.CreateDirectory(configuration.To);
+            }
+        }
+        catch (NullReferenceException exception)
+        {
+            if (!await HandleException(configuration, exception))
+            {
+                throw;
+            }
+        }
     }
 }

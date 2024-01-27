@@ -10,10 +10,11 @@ internal class VerifyOperationExecutor(OperationLedger operationLedgerEntries) :
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(configuration.RootPath) 
+            if (configuration.PathResolution == PathResolution.Relative 
+                && string.IsNullOrWhiteSpace(configuration.RootPath) 
                 || !Directory.Exists(configuration.RootPath))
             {
-                throw new DirectoryNotFoundException($"Root path not found: {configuration.RootPath}");
+                throw new DirectoryNotFoundException($"Root path not found: {configuration.RootPath} when path resolution is relative");
             }
 
             if (configuration.Files == null)
