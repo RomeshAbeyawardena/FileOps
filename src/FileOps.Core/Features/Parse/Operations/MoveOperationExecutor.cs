@@ -1,10 +1,24 @@
 ﻿
+using Microsoft.Extensions.FileProviders;
+
 namespace FileOps.Core.Features.Parse.Operations;
 
-internal class MoveOperationExecutor(OperationLedger operationLedgerEntry) : OperationExecutorBase<MoveOperationConfiguration>(operationLedgerEntry, Operation.Move)
+internal class MoveOperationExecutor(OperationLedger operationLedgerEntry, IFileProvider fileProvider) : FileOperationExecutorBase<MoveOperationConfiguration>(operationLedgerEntry, fileProvider, Operation.Move)
 {
-    public override Task Execute(MoveOperationConfiguration configuration, CancellationToken cancellationToken)
+    protected override Task<bool> ProcessFile(IFileTransferOperationConfiguration operationConfiguration, string destination, IFileInfo file, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        if (file.PhysicalPath == null)
+        {
+            throw new NullReferenceException("File not found");
+        }
+
+        if (file.Exists)
+        {
+            File.Move(file.PhysicalPath, Path.Combine(destination, file.Name), true);
+            return Task.FromResult(true);
+        }
+
+        return Task.FromResult(false);
     }
+}
 }

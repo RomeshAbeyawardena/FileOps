@@ -1,65 +1,25 @@
 ﻿using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace FileOps.Core.Features.Parse.Operations;
 
-internal class CopyOperationExecutor(OperationLedger operationLedgerEntries, IFileProvider fileProvider) : OperationExecutorBase<CopyOperationConfiguration>(operationLedgerEntries, Operation.Copy)
+internal class CopyOperationExecutor(OperationLedger operationLedgerEntries, IFileProvider fileProvider) : FileOperationExecutorBase<CopyOperationConfiguration>(operationLedgerEntries, 
+    fileProvider,
+    Operation.Copy)
 {
-    public override async Task Execute(CopyOperationConfiguration configuration, CancellationToken cancellationToken)
+    protected override Task<bool> ProcessFile(IFileTransferOperationConfiguration operationConfiguration, string destination, IFileInfo file, CancellationToken cancellationToken)
     {
-        try
+        if(file.PhysicalPath == null)
         {
-            if (configuration.PathResolution == PathResolution.Relative
-                && string.IsNullOrWhiteSpace(configuration.RootPath))
-            {
-                throw new NullReferenceException("Root path must be specified");
-            }
-
-            if (string.IsNullOrWhiteSpace(configuration.To))
-            {
-                throw new NullReferenceException($"Destination {nameof(configuration.To)} not specified");
-            }
-
-            var toPath = configuration.PathResolution == PathResolution.Absolute
-                ? configuration.To
-                : Path.Combine(configuration.RootPath!, configuration.To);
-
-            if (configuration.DirectoryResolution == DirectoryResolution.CreateDirectories
-                && !Directory.Exists(toPath))
-            {
-                Directory.CreateDirectory(toPath);
-            }
-
-            if(configuration.Files == null)
-            {
-                throw new NullReferenceException("No files to process");
-            }
-
-            foreach(var file in configuration.Files)
-            {
-                var filePath = configuration.PathResolution == PathResolution.Relative
-                    ? Path.Combine(configuration.RootPath!, file)
-                    : file;
-
-                var fileInfo = fileProvider.GetFileInfo(filePath);
-                if (fileInfo.Exists)
-                {
-                    File.Copy(filePath, Path.Combine(toPath, fileInfo.Name), true);
-                }
-            }
+            throw new NullReferenceException("File not found");
         }
-        catch (IOException exception)
+
+        if (file.Exists)
         {
-            if (!await HandleException(configuration, exception))
-            {
-                throw;
-            }
+            File.Copy(file.PhysicalPath, Path.Combine(destination, file.Name), true);
+            return Task.FromResult(true);
         }
-        catch (NullReferenceException exception)
-        {
-            if (!await HandleException(configuration, exception))
-            {
-                throw;
-            }
-        }
+
+        return Task.FromResult(false);
     }
 }

@@ -3,7 +3,7 @@
 namespace FileOps.Core.Features.Parse.Operations;
 
 internal abstract class FileOperationExecutorBase<TFileOperationConfiguration>(OperationLedger operationLedgerEntries, IFileProvider fileProvider, Operation operation) : OperationExecutorBase<TFileOperationConfiguration>(operationLedgerEntries, operation)
-    where TFileOperationConfiguration : IFileOperationConfiguration
+    where TFileOperationConfiguration : IFileTransferOperationConfiguration
 {
     protected IFileProvider FileProvider => fileProvider;
     public override async Task Execute(TFileOperationConfiguration configuration, CancellationToken cancellationToken)
@@ -43,7 +43,7 @@ internal abstract class FileOperationExecutorBase<TFileOperationConfiguration>(O
                     : file;
 
                 var fileInfo = fileProvider.GetFileInfo(filePath);
-                await ProcessFile(configuration, fileInfo, cancellationToken);
+                await ProcessFile(configuration, toPath, fileInfo, cancellationToken);
             }
         }
         catch (IOException exception)
@@ -63,5 +63,6 @@ internal abstract class FileOperationExecutorBase<TFileOperationConfiguration>(O
     }
 
     protected abstract Task<bool> ProcessFile(
-        IFileOperationConfiguration operationConfiguration, IFileInfo file, CancellationToken cancellationToken);
+        IFileTransferOperationConfiguration operationConfiguration, string destination, 
+        IFileInfo file, CancellationToken cancellationToken);
 }
