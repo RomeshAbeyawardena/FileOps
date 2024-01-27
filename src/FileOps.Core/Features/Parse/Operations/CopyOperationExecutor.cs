@@ -1,11 +1,7 @@
 ﻿namespace FileOps.Core.Features.Parse.Operations;
 
-internal class CopyOperationExecutor : OperationExecutorBase<CopyOperationConfiguration>
+internal class CopyOperationExecutor(OperationLedger operationLedgerEntries) : OperationExecutorBase<CopyOperationConfiguration>(operationLedgerEntries, Operation.Copy)
 {
-    public CopyOperationExecutor() : base(Operation.Copy)
-    {
-    }
-
     public override bool CanExecute(CopyOperationConfiguration configuration)
     {
         return base.CanExecute(configuration);

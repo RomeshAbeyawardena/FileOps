@@ -1,14 +1,15 @@
 ﻿
 namespace FileOps.Core.Features.Parse.Operations;
 
-internal class VerifyOperationExecutor : OperationExecutorBase<VerifyOperationConfiguration>
+internal class VerifyOperationExecutor(OperationLedger operationLedgerEntries) : OperationExecutorBase<VerifyOperationConfiguration>(operationLedgerEntries, Operation.Verify)
 {
-    public VerifyOperationExecutor() : base(Operation.Verify)
-    {
-    }
-
     public override Task Execute(VerifyOperationConfiguration configuration, CancellationToken cancellationToken)
     {
+        LedgerEntries.Add(new OperationLedgerEntry
+        {
+            Configuration = configuration,
+        });
         throw new NotImplementedException();
+
     }
 }
