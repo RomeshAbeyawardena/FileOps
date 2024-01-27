@@ -20,6 +20,6 @@ internal class CopyOperationExecutor(OperationLedger operationLedgerEntries, IFi
             return ValueTask.FromResult(true);
         }
 
-        return Task.FromResult(false);
+        return ValueTask.FromResult(false);
     }
 }
