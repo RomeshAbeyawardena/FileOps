@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Reflection.Metadata;
 
 namespace FileOps.Core.Features.Parse.Operations;
 
@@ -7,20 +8,10 @@ internal class VerifyOperationExecutor(OperationLedger operationLedgerEntries) :
 {
     public override async Task Execute(VerifyOperationConfiguration configuration, CancellationToken cancellationToken)
     {
-        Task HandleException(Exception exception, bool succeeded = false)
-        {
-            LedgerEntries.Add(new OperationLedgerEntry
-            {
-                Configuration = configuration,
-                Exception = exception,
-                Succeeded = succeeded
-            });
-            return Task.CompletedTask;
-        }
-
         try
         {
-            if (!Directory.Exists(configuration.RootPath))
+            if (string.IsNullOrWhiteSpace(configuration.RootPath) 
+                || !Directory.Exists(configuration.RootPath))
             {
                 throw new DirectoryNotFoundException($"Root path not found: {configuration.RootPath}");
             }
@@ -30,20 +21,21 @@ internal class VerifyOperationExecutor(OperationLedger operationLedgerEntries) :
                 throw new NullReferenceException("No files to process");
             }
 
-            if(configuration.PathResolution == PathResolution.Absolute
-                ? configuration.Files.Any(f => !File.Exists(f))
-                : configuration.Files!.Any(f => !File.Exists(
-                    Path.Combine(configuration.RootPath, f)))
-                )
+            var files = configuration.PathResolution == PathResolution.Absolute
+                ? configuration.Files.Where(f => !File.Exists(f))
+                : configuration.Files!.Where(f => !File.Exists(
+                    Path.Combine(configuration.RootPath, f)));
+
+            if (files.Any())
             {
-                throw new FileNotFoundException();
+                throw new FileNotFoundException($"The following files could not be found: ${string.Join(',', files)}");
             }
             var exists = true;
             
             LedgerEntries.Add(new OperationLedgerEntry
             {
                 Configuration = configuration,
-                Result = true,
+                Result = exists == configuration.Exists,
                 Succeeded = exists == configuration.Exists
             });
 
@@ -51,15 +43,18 @@ internal class VerifyOperationExecutor(OperationLedger operationLedgerEntries) :
         catch (FileNotFoundException exception)
         {
             var exists = false;
-            await HandleException(exception, exists == configuration.Exists);
+            if (!await HandleException(configuration, exception, exists == configuration.Exists))
+                throw;
         }
         catch(IOException exception)
         {
-            await HandleException(exception);
+            if (!await HandleException(configuration, exception))
+                throw;
         }
         catch(NullReferenceException exception)
         {
-            await HandleException(exception);
+            if (!await HandleException(configuration, exception))
+                throw;
         }
     }
 }
