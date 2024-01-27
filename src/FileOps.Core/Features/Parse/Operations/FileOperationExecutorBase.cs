@@ -2,9 +2,11 @@
 
 namespace FileOps.Core.Features.Parse.Operations;
 
-internal class CopyOperationExecutor(OperationLedger operationLedgerEntries, IFileProvider fileProvider) : OperationExecutorBase<CopyOperationConfiguration>(operationLedgerEntries, Operation.Copy)
+internal abstract class FileOperationExecutorBase<TFileOperationConfiguration>(OperationLedger operationLedgerEntries, IFileProvider fileProvider, Operation operation) : OperationExecutorBase<TFileOperationConfiguration>(operationLedgerEntries, operation)
+    where TFileOperationConfiguration : IFileOperationConfiguration
 {
-    public override async Task Execute(CopyOperationConfiguration configuration, CancellationToken cancellationToken)
+    protected IFileProvider FileProvider => fileProvider;
+    public override async Task Execute(TFileOperationConfiguration configuration, CancellationToken cancellationToken)
     {
         try
         {
@@ -29,22 +31,19 @@ internal class CopyOperationExecutor(OperationLedger operationLedgerEntries, IFi
                 Directory.CreateDirectory(toPath);
             }
 
-            if(configuration.Files == null)
+            if (configuration.Files == null)
             {
                 throw new NullReferenceException("No files to process");
             }
 
-            foreach(var file in configuration.Files)
+            foreach (var file in configuration.Files)
             {
                 var filePath = configuration.PathResolution == PathResolution.Relative
                     ? Path.Combine(configuration.RootPath!, file)
                     : file;
 
                 var fileInfo = fileProvider.GetFileInfo(filePath);
-                if (fileInfo.Exists)
-                {
-                    File.Copy(filePath, Path.Combine(toPath, fileInfo.Name), true);
-                }
+                await ProcessFile(configuration, fileInfo, cancellationToken);
             }
         }
         catch (IOException exception)
@@ -62,4 +61,7 @@ internal class CopyOperationExecutor(OperationLedger operationLedgerEntries, IFi
             }
         }
     }
+
+    protected abstract Task<bool> ProcessFile(
+        IFileOperationConfiguration operationConfiguration, IFileInfo file, CancellationToken cancellationToken);
 }
