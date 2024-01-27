@@ -7,7 +7,7 @@ internal class CopyOperationExecutor(OperationLedger operationLedgerEntries, IFi
     fileProvider,
     Operation.Copy)
 {
-    protected override Task<bool> ProcessFile(IFileTransferOperationConfiguration operationConfiguration, string destination, IFileInfo file, CancellationToken cancellationToken)
+    protected override ValueTask<bool> ProcessFile(IFileTransferOperationConfiguration operationConfiguration, string destination, IFileInfo file, CancellationToken cancellationToken)
     {
         if(file.PhysicalPath == null)
         {
@@ -17,7 +17,7 @@ internal class CopyOperationExecutor(OperationLedger operationLedgerEntries, IFi
         if (file.Exists)
         {
             File.Copy(file.PhysicalPath, Path.Combine(destination, file.Name), true);
-            return Task.FromResult(true);
+            return ValueTask.FromResult(true);
         }
 
         return Task.FromResult(false);

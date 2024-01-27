@@ -2,7 +2,14 @@
 
 internal abstract class OperationExecutorBase(Operation operation, OperationLedger ledgerEntries) : IOperationExecutor
 {
-    protected Task<bool> HandleException(IOperationConfiguration configuration, 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="configuration"></param>
+    /// <param name="exception"></param>
+    /// <param name="succeeded"></param>
+    /// <returns>A task that determines where the exception was handled</returns>
+    protected ValueTask<bool> HandleException(IOperationConfiguration configuration, 
         Exception exception, bool succeeded = false)
     {
         LedgerEntries.Add(new OperationLedgerEntry
@@ -14,10 +21,10 @@ internal abstract class OperationExecutorBase(Operation operation, OperationLedg
 
         if (configuration.FailureAction == FailureAction.AbortOnError)
         {
-            return Task.FromResult(false);
+            return ValueTask.FromResult(false);
         }
 
-        return Task.FromResult(true);
+        return ValueTask.FromResult(true);
     }
 
     protected OperationLedger LedgerEntries => ledgerEntries;

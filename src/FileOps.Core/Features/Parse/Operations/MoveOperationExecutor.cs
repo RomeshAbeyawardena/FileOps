@@ -5,7 +5,7 @@ namespace FileOps.Core.Features.Parse.Operations;
 
 internal class MoveOperationExecutor(OperationLedger operationLedgerEntry, IFileProvider fileProvider) : FileOperationExecutorBase<MoveOperationConfiguration>(operationLedgerEntry, fileProvider, Operation.Move)
 {
-    protected override Task<bool> ProcessFile(IFileTransferOperationConfiguration operationConfiguration, string destination, IFileInfo file, CancellationToken cancellationToken)
+    protected override ValueTask<bool> ProcessFile(IFileTransferOperationConfiguration operationConfiguration, string destination, IFileInfo file, CancellationToken cancellationToken)
     {
         if (file.PhysicalPath == null)
         {
@@ -15,10 +15,9 @@ internal class MoveOperationExecutor(OperationLedger operationLedgerEntry, IFile
         if (file.Exists)
         {
             File.Move(file.PhysicalPath, Path.Combine(destination, file.Name), true);
-            return Task.FromResult(true);
+            return ValueTask.FromResult(true);
         }
 
-        return Task.FromResult(false);
+        return ValueTask.FromResult(false);
     }
-}
 }

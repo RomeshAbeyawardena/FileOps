@@ -62,7 +62,7 @@ internal abstract class FileOperationExecutorBase<TFileOperationConfiguration>(O
         }
     }
 
-    protected abstract Task<bool> ProcessFile(
+    protected abstract ValueTask<bool> ProcessFile(
         IFileTransferOperationConfiguration operationConfiguration, string destination, 
         IFileInfo file, CancellationToken cancellationToken);
 }
