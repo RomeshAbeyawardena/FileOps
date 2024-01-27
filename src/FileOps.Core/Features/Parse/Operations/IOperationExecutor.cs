@@ -32,6 +32,12 @@ internal abstract class OperationExecutorBase<TOperationConfiguration>
 {
     public OperationExecutorBase(Operation operation) : base(operation) { }
 
+    public override bool CanExecute(IOperationConfiguration configuration)
+    {
+        return configuration is TOperationConfiguration operationConfiguration
+            && base.CanExecute(configuration) && this.CanExecute(configuration);
+    }
+
     public override Task Execute(IOperationConfiguration configuration, 
         CancellationToken cancellationToken)
     {
