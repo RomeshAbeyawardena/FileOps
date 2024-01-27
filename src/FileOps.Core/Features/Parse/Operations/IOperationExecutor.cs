@@ -4,7 +4,7 @@ internal interface IOperationExecutor
 {
     Operation Operation { get; }
     bool CanExecute(IOperationConfiguration configuration);
-    void Execute(IOperationConfiguration configuration);
+    Task Execute(IOperationConfiguration configuration, CancellationToken cancellationToken);
 }
 
 internal abstract class OperationExecutorBase : IOperationExecutor
@@ -18,8 +18,36 @@ internal abstract class OperationExecutorBase : IOperationExecutor
 
     public virtual bool CanExecute(IOperationConfiguration configuration)
     {
-        return configuration.Enabled;
+        return configuration.Enabled 
+            && configuration.Operation == Operation;
     }
 
-    public abstract void Execute(IOperationConfiguration configuration);
+    public abstract Task Execute(IOperationConfiguration configuration, 
+        CancellationToken cancellationToken);
+}
+
+internal abstract class OperationExecutorBase<TOperationConfiguration>
+    : OperationExecutorBase
+    where TOperationConfiguration : IOperationConfiguration
+{
+    public OperationExecutorBase(Operation operation) : base(operation) { }
+
+    public override Task Execute(IOperationConfiguration configuration, 
+        CancellationToken cancellationToken)
+    {
+        if (configuration is TOperationConfiguration operationConfiguration)
+        {
+            return Execute(operationConfiguration, cancellationToken);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    public virtual bool CanExecute(TOperationConfiguration configuration)
+    {
+        return true;
+    }
+
+    public abstract Task Execute(TOperationConfiguration configuration,
+        CancellationToken cancellationToken);
 }
