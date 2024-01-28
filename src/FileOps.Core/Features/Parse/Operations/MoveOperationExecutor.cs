@@ -3,9 +3,10 @@ using Microsoft.Extensions.FileProviders;
 
 namespace FileOps.Core.Features.Parse.Operations;
 
-internal class MoveOperationExecutor(OperationLedger operationLedgerEntry, IFileProvider fileProvider) : FileOperationExecutorBase<MoveOperationConfiguration>(operationLedgerEntry, fileProvider, Operation.Move)
+internal class MoveOperationExecutor(OperationLedger operationLedgerEntry, IFileProvider fileProvider, IDirectoryOperation directoryOperation, IFileOperation fileOperation) : FileOperationExecutorBase<MoveOperationConfiguration>(operationLedgerEntry, fileProvider,
+    directoryOperation, Operation.Move)
 {
-    protected override ValueTask<bool> ProcessFile(IFileTransferOperationConfiguration operationConfiguration, string destination, IFileInfo file, CancellationToken cancellationToken)
+    protected override async ValueTask<bool> ProcessFile(IFileTransferOperationConfiguration operationConfiguration, string destination, IFileInfo file, CancellationToken cancellationToken)
     {
         if (file.PhysicalPath == null)
         {
@@ -14,10 +15,12 @@ internal class MoveOperationExecutor(OperationLedger operationLedgerEntry, IFile
 
         if (file.Exists)
         {
-            File.Move(file.PhysicalPath, Path.Combine(destination, file.Name), true);
-            return ValueTask.FromResult(true);
+            await fileOperation
+                .MoveFileAsync(file, Path.Combine(destination, file.Name), 
+                cancellationToken, true);
+            return true;
         }
 
-        return ValueTask.FromResult(false);
+        return false;
     }
 }

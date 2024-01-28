@@ -2,7 +2,8 @@
 
 namespace FileOps.Core.Features.Parse.Operations;
 
-internal abstract class FileOperationExecutorBase<TFileOperationConfiguration>(OperationLedger operationLedgerEntries, IFileProvider fileProvider, Operation operation) : OperationExecutorBase<TFileOperationConfiguration>(operationLedgerEntries, operation)
+internal abstract class FileOperationExecutorBase<TFileOperationConfiguration>(OperationLedger operationLedgerEntries, IFileProvider fileProvider, 
+    IDirectoryOperation directoryOperation, Operation operation) : OperationExecutorBase<TFileOperationConfiguration>(operationLedgerEntries, operation)
     where TFileOperationConfiguration : IFileTransferOperationConfiguration
 {
     protected IFileProvider FileProvider => fileProvider;
@@ -26,7 +27,7 @@ internal abstract class FileOperationExecutorBase<TFileOperationConfiguration>(O
                 : Path.Combine(configuration.RootPath!, configuration.To);
 
             if (configuration.DirectoryResolution == DirectoryResolution.CreateDirectories
-                && !Directory.Exists(toPath))
+                && !await directoryOperation.ExistsAsync(toPath, cancellationToken))
             {
                 Directory.CreateDirectory(toPath);
             }

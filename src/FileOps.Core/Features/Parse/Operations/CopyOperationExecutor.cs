@@ -3,11 +3,11 @@ using System.IO;
 
 namespace FileOps.Core.Features.Parse.Operations;
 
-internal class CopyOperationExecutor(OperationLedger operationLedgerEntries, IFileProvider fileProvider) : FileOperationExecutorBase<CopyOperationConfiguration>(operationLedgerEntries, 
-    fileProvider,
+internal class CopyOperationExecutor(OperationLedger operationLedgerEntries, IFileProvider fileProvider, IDirectoryOperation directoryOperation, IFileOperation fileOperation) : FileOperationExecutorBase<CopyOperationConfiguration>(operationLedgerEntries, 
+    fileProvider, directoryOperation,
     Operation.Copy)
 {
-    protected override ValueTask<bool> ProcessFile(IFileTransferOperationConfiguration operationConfiguration, string destination, IFileInfo file, CancellationToken cancellationToken)
+    protected override async ValueTask<bool> ProcessFile(IFileTransferOperationConfiguration operationConfiguration, string destination, IFileInfo file, CancellationToken cancellationToken)
     {
         if(file.PhysicalPath == null)
         {
@@ -16,10 +16,10 @@ internal class CopyOperationExecutor(OperationLedger operationLedgerEntries, IFi
 
         if (file.Exists)
         {
-            File.Copy(file.PhysicalPath, Path.Combine(destination, file.Name), true);
-            return ValueTask.FromResult(true);
+            await fileOperation.CopyFileAsync(file, Path.Combine(destination, file.Name), cancellationToken, true);
+            return true;
         }
 
-        return ValueTask.FromResult(false);
+        return false;
     }
 }
