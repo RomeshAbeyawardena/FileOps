@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.FileProviders;
-using System.IO;
+using FileOps.Core;
 
 namespace FileOps.Core.Features.Parse.Operations;
 
@@ -11,14 +11,27 @@ internal class CopyOperationExecutor(OperationLedger operationLedgerEntries, IFi
     {
         if(file.PhysicalPath == null)
         {
-            throw new NullReferenceException("File not found");
+            throw new NullReferenceException("File not specified");
         }
 
         if (file.Exists)
         {
-            await fileOperation.CopyFileAsync(file, Path.Combine(destination, file.Name), cancellationToken, true);
+            var copiedFileInfo = await fileOperation.CopyFileAsync(file, Path.Combine(destination, file.Name), cancellationToken, true);
+
+            LedgerEntries.Add(new OperationLedgerEntry
+            {
+                Configuration = operationConfiguration,
+                Result = copiedFileInfo,
+                Succeeded = copiedFileInfo.Exists
+            });
             return true;
         }
+
+        LedgerEntries.Add(new OperationLedgerEntry
+        {
+            Configuration = operationConfiguration,
+            Exception = new NullReferenceException("File not found")
+        });
 
         return false;
     }

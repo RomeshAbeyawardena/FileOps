@@ -1,5 +1,4 @@
-﻿
-using Microsoft.Extensions.FileProviders;
+﻿using Microsoft.Extensions.FileProviders;
 
 namespace FileOps.Core.Features.Parse.Operations;
 
@@ -10,16 +9,29 @@ internal class MoveOperationExecutor(OperationLedger operationLedgerEntry, IFile
     {
         if (file.PhysicalPath == null)
         {
-            throw new NullReferenceException("File not found");
+            throw new NullReferenceException("File not specified");
         }
 
         if (file.Exists)
         {
-            await fileOperation
+            var movedFileInfo = await fileOperation
                 .MoveFileAsync(file, Path.Combine(destination, file.Name), 
                 cancellationToken, true);
+
+            LedgerEntries.Add(new OperationLedgerEntry
+            {
+                Configuration = operationConfiguration,
+                Result = movedFileInfo,
+                Succeeded = movedFileInfo.Exists
+            });
             return true;
         }
+
+        LedgerEntries.Add(new OperationLedgerEntry
+        {
+            Configuration = operationConfiguration,
+            Exception = new NullReferenceException("File not found")
+        });
 
         return false;
     }
