@@ -4,9 +4,9 @@ using System.Text.Json;
 
 namespace FileOps.Core.Features.Parse;
 
-internal class Parse(IFileProvider fileProvider) : IRequestHandler<ParseCommand, FileOpsConfiguration?>
+internal class Parse(IFileProvider fileProvider) : IRequestHandler<ParseCommand, IFileOpsConfiguration?>
 {
-    public async Task<FileOpsConfiguration?> Handle(ParseCommand request, CancellationToken cancellationToken)
+    public async Task<IFileOpsConfiguration?> Handle(ParseCommand request, CancellationToken cancellationToken)
     {
         var json = request.Json;
         if (string.IsNullOrWhiteSpace(json) && !string.IsNullOrWhiteSpace(request.FileName))

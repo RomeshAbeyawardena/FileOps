@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace FileOps.Core;
 
-internal record JsonFileOpsConfiguration
+internal record JsonFileOpsConfiguration : IFileOpsConfiguration
 {
     public static JsonSerializerOptions GetDefault(JsonSerializerOptions? options = null)
     {
@@ -30,4 +30,20 @@ internal record JsonFileOpsConfiguration
     public IEnumerable<MoveOperationConfiguration>? Move { get; set; }
     public IEnumerable<CopyOperationConfiguration>? Copy { get; set; }
     public IEnumerable<VerifyOperationConfiguration>? Verify { get; set; }
+
+    IEnumerable<IFileTransferOperationConfiguration>? IFileOpsConfiguration.Copy 
+    { 
+        get => Copy;
+        set => Copy = (IEnumerable<CopyOperationConfiguration>?)value; 
+    }
+    IEnumerable<IFileTransferOperationConfiguration>? IFileOpsConfiguration.Move
+    {
+        get => Move;
+        set => Move = (IEnumerable<MoveOperationConfiguration>?)value;
+    }
+    IEnumerable<IValidationOperationConfiguration>? IFileOpsConfiguration.Verify
+    {
+        get => Verify;
+        set => Verify = (IEnumerable<VerifyOperationConfiguration>?)value;
+    }
 }

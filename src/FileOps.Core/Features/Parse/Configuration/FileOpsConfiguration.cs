@@ -1,6 +1,14 @@
 ﻿namespace FileOps.Core;
 
-internal record FileOpsConfiguration
+internal interface IFileOpsConfiguration
+{
+    string? RootPath { get; set; }
+    IEnumerable<IFileTransferOperationConfiguration>? Move { get; set; }
+    IEnumerable<IFileTransferOperationConfiguration>? Copy { get; set; }
+    IEnumerable<IValidationOperationConfiguration>? Verify { get; set; }
+}
+
+internal record FileOpsConfiguration : IFileOpsConfiguration
 {
     public static implicit operator FileOpsConfiguration?(JsonFileOpsConfiguration? configuration)
     {
