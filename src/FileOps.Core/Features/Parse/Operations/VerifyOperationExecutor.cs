@@ -1,8 +1,4 @@
-﻿
-using System;
-using System.Reflection.Metadata;
-
-namespace FileOps.Core.Features.Parse.Operations;
+﻿namespace FileOps.Core.Operations;
 
 internal class VerifyOperationExecutor(OperationLedger operationLedgerEntries) : OperationExecutorBase<VerifyOperationConfiguration>(operationLedgerEntries, Operation.Verify)
 {

@@ -1,4 +1,4 @@
-﻿namespace FileOps.Core.Features.Parse.Operations;
+﻿namespace FileOps.Core;
 
 internal record VerifyOperationConfiguration : OperationConfigurationBase, IValidationOperationConfiguration
 {

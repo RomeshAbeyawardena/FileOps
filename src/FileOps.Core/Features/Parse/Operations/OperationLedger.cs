@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace FileOps.Core.Features.Parse.Operations;
+namespace FileOps.Core;
 
 internal class OperationLedger : IEnumerable<OperationLedgerEntry>
 {

@@ -1,4 +1,5 @@
-﻿using FileOps.Core.Features.Parse.Operations;
+﻿using FileOps.Core;
+using FileOps.Core.Features.Parse.Operations;
 using Microsoft.Extensions.FileProviders;
 using Moq;
 
@@ -11,12 +12,14 @@ public class CopyOperationExecutorTests
     public async Task Execute_does_its_task()
     {
         var fileProviderMock = new Mock<IFileProvider>();
+        var directoryOperationMock = new Mock<IDirectoryOperation>();
+        var fileOperationMock = new Mock<IFileOperation>();
         var ledger = new OperationLedger();
-        var executor = new CopyOperationExecutor(ledger, fileProviderMock.Object);
+        var executor = new CopyOperationExecutor(ledger, fileProviderMock.Object, directoryOperationMock.Object, fileOperationMock.Object);
 
         await executor.Execute(new CopyOperationConfiguration
         {
-            FailureAction = Core.FailureAction.SkipFile
+            FailureAction = FailureAction.SkipFile
         }, CancellationToken.None);
     }
 }

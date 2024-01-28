@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.FileProviders;
 
-namespace FileOps.Core.Features.Parse.Operations;
+namespace FileOps.Core.Operations;
 
 internal class MoveOperationExecutor(OperationLedger operationLedgerEntry, IFileProvider fileProvider, IDirectoryOperation directoryOperation, IFileOperation fileOperation) : FileOperationExecutorBase<MoveOperationConfiguration>(operationLedgerEntry, fileProvider,
     directoryOperation, Operation.Move)

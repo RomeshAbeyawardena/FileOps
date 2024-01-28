@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.FileProviders;
-using FileOps.Core;
 
-namespace FileOps.Core.Features.Parse.Operations;
+namespace FileOps.Core.Operations;
 
 internal class CopyOperationExecutor(OperationLedger operationLedgerEntries, IFileProvider fileProvider, IDirectoryOperation directoryOperation, IFileOperation fileOperation) : FileOperationExecutorBase<CopyOperationConfiguration>(operationLedgerEntries, 
     fileProvider, directoryOperation,

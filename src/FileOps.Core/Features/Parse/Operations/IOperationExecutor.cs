@@ -1,4 +1,4 @@
-﻿namespace FileOps.Core.Features.Parse.Operations;
+﻿namespace FileOps.Core.Operations;
 
 internal interface IOperationExecutor
 {

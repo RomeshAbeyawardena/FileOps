@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.FileProviders;
 
-namespace FileOps.Core.Features.Parse.Operations;
+namespace FileOps.Core.Operations;
 
 internal abstract class FileOperationExecutorBase<TFileOperationConfiguration>(OperationLedger operationLedgerEntries, IFileProvider fileProvider, 
     IDirectoryOperation directoryOperation, Operation operation) : OperationExecutorBase<TFileOperationConfiguration>(operationLedgerEntries, operation)

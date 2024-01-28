@@ -1,4 +1,4 @@
-﻿namespace FileOps.Core.Features.Parse.Operations;
+﻿namespace FileOps.Core.Operations;
 
 internal abstract class OperationExecutorBase<TOperationConfiguration>(OperationLedger operationLedgerEntries, Operation operation)
     : OperationExecutorBase(operation, operationLedgerEntries)
