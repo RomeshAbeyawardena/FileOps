@@ -1,10 +1,10 @@
-﻿using FileOps.Core.Features.Parse;
-using MediatR;
+﻿using MediatR;
 
 namespace FileOps.Core.Features.Process;
 
-internal class Process : IRequestHandler<ProcessCommand, OperationLedger>
+internal class Process(IOperationProcessor operationProcessor) : IRequestHandler<ProcessCommand, OperationLedger>
 {
+
     public async Task<OperationLedger> Handle(ProcessCommand request, CancellationToken cancellationToken)
     {
         var operationLedger = new OperationLedger();
@@ -12,8 +12,14 @@ internal class Process : IRequestHandler<ProcessCommand, OperationLedger>
         {
             throw new NullReferenceException();
         }
+
+        var ops = operationProcessor
+            .GetOperators(request.Configuration);
         
-        await Task.CompletedTask;
+        foreach(var op in ops)
+        {
+            await op.ExecuteAll(operationLedger, cancellationToken);
+        }
 
         return operationLedger;
     }
