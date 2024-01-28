@@ -1,5 +1,5 @@
 ﻿using FileOps.Core;
-using FileOps.Core.Features.Parse.Operations;
+using FileOps.Core.Operations;
 using Microsoft.Extensions.FileProviders;
 using Moq;
 
