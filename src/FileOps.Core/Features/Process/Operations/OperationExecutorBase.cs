@@ -1,6 +1,6 @@
 ﻿namespace FileOps.Core.Operations;
 
-internal abstract class OperationExecutorBase(Operation operation, OperationLedger ledgerEntries) : IOperationExecutor
+internal abstract class OperationExecutorBase(Operation operation) : IOperationExecutor
 {
     /// <summary>
     /// 
@@ -12,7 +12,7 @@ internal abstract class OperationExecutorBase(Operation operation, OperationLedg
     protected ValueTask<bool> HandleException(IOperationConfiguration configuration, 
         Exception exception, bool succeeded = false)
     {
-        LedgerEntries.Add(new OperationLedgerEntry
+        LedgerEntries?.Add(new OperationLedgerEntry
         {
             Configuration = configuration,
             Exception = exception,
@@ -27,7 +27,7 @@ internal abstract class OperationExecutorBase(Operation operation, OperationLedg
         return ValueTask.FromResult(true);
     }
 
-    protected OperationLedger LedgerEntries => ledgerEntries;
+    public OperationLedger? LedgerEntries { get; set; }
     public Operation Operation { get; } = operation;
     
     public virtual bool CanExecute(IOperationConfiguration configuration)

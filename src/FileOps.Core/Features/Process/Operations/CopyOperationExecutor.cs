@@ -2,7 +2,7 @@
 
 namespace FileOps.Core.Operations;
 
-internal class CopyOperationExecutor(OperationLedger operationLedgerEntries, IFileProvider fileProvider, IDirectoryOperation directoryOperation, IFileOperation fileOperation) : FileOperationExecutorBase<CopyOperationConfiguration>(operationLedgerEntries, 
+internal class CopyOperationExecutor(IFileProvider fileProvider, IDirectoryOperation directoryOperation, IFileOperation fileOperation) : FileOperationExecutorBase<CopyOperationConfiguration>( 
     fileProvider, directoryOperation,
     Operation.Copy)
 {
@@ -17,7 +17,7 @@ internal class CopyOperationExecutor(OperationLedger operationLedgerEntries, IFi
         {
             var copiedFileInfo = await fileOperation.CopyFileAsync(file, Path.Combine(destination, file.Name), cancellationToken, true);
 
-            LedgerEntries.Add(new OperationLedgerEntry
+            LedgerEntries?.Add(new OperationLedgerEntry
             {
                 Configuration = operationConfiguration,
                 Result = copiedFileInfo,
@@ -26,7 +26,7 @@ internal class CopyOperationExecutor(OperationLedger operationLedgerEntries, IFi
             return true;
         }
 
-        LedgerEntries.Add(new OperationLedgerEntry
+        LedgerEntries?.Add(new OperationLedgerEntry
         {
             Configuration = operationConfiguration,
             Exception = new NullReferenceException("File not found")

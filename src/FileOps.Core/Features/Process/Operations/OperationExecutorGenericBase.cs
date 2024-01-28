@@ -1,7 +1,7 @@
 ﻿namespace FileOps.Core.Operations;
 
-internal abstract class OperationExecutorBase<TOperationConfiguration>(OperationLedger operationLedgerEntries, Operation operation)
-    : OperationExecutorBase(operation, operationLedgerEntries)
+internal abstract class OperationExecutorBase<TOperationConfiguration>(Operation operation)
+    : OperationExecutorBase(operation)
     where TOperationConfiguration : IOperationConfiguration
 {
     public override bool CanExecute(IOperationConfiguration configuration)

@@ -2,7 +2,7 @@
 
 namespace FileOps.Core.Operations;
 
-internal class MoveOperationExecutor(OperationLedger operationLedgerEntry, IFileProvider fileProvider, IDirectoryOperation directoryOperation, IFileOperation fileOperation) : FileOperationExecutorBase<MoveOperationConfiguration>(operationLedgerEntry, fileProvider,
+internal class MoveOperationExecutor(IFileProvider fileProvider, IDirectoryOperation directoryOperation, IFileOperation fileOperation) : FileOperationExecutorBase<MoveOperationConfiguration>(fileProvider,
     directoryOperation, Operation.Move)
 {
     protected override async ValueTask<bool> ProcessFile(IFileTransferOperationConfiguration operationConfiguration, string destination, IFileInfo file, CancellationToken cancellationToken)
@@ -18,7 +18,7 @@ internal class MoveOperationExecutor(OperationLedger operationLedgerEntry, IFile
                 .MoveFileAsync(file, Path.Combine(destination, file.Name), 
                 cancellationToken, true);
 
-            LedgerEntries.Add(new OperationLedgerEntry
+            LedgerEntries?.Add(new OperationLedgerEntry
             {
                 Configuration = operationConfiguration,
                 Result = movedFileInfo,
@@ -27,7 +27,7 @@ internal class MoveOperationExecutor(OperationLedger operationLedgerEntry, IFile
             return true;
         }
 
-        LedgerEntries.Add(new OperationLedgerEntry
+        LedgerEntries?.Add(new OperationLedgerEntry
         {
             Configuration = operationConfiguration,
             Exception = new NullReferenceException("File not found")

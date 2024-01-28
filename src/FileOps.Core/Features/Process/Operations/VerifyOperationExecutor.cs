@@ -1,6 +1,6 @@
 ﻿namespace FileOps.Core.Operations;
 
-internal class VerifyOperationExecutor(OperationLedger operationLedgerEntries) : OperationExecutorBase<VerifyOperationConfiguration>(operationLedgerEntries, Operation.Verify)
+internal class VerifyOperationExecutor() : OperationExecutorBase<VerifyOperationConfiguration>(Operation.Verify)
 {
     public override async Task Execute(VerifyOperationConfiguration configuration, CancellationToken cancellationToken)
     {
@@ -29,7 +29,7 @@ internal class VerifyOperationExecutor(OperationLedger operationLedgerEntries) :
             }
             var exists = true;
             
-            LedgerEntries.Add(new OperationLedgerEntry
+            LedgerEntries?.Add(new OperationLedgerEntry
             {
                 Configuration = configuration,
                 Result = exists == configuration.Exists,

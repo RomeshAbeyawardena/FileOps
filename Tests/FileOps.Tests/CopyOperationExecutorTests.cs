@@ -15,8 +15,10 @@ public class CopyOperationExecutorTests
         var directoryOperationMock = new Mock<IDirectoryOperation>();
         var fileOperationMock = new Mock<IFileOperation>();
         var ledger = new OperationLedger();
-        var executor = new CopyOperationExecutor(ledger, fileProviderMock.Object, directoryOperationMock.Object, fileOperationMock.Object);
-
+        var executor = new CopyOperationExecutor(fileProviderMock.Object, directoryOperationMock.Object, fileOperationMock.Object)
+        {
+            LedgerEntries = ledger
+        };
         await executor.Execute(new CopyOperationConfiguration
         {
             FailureAction = FailureAction.SkipFile

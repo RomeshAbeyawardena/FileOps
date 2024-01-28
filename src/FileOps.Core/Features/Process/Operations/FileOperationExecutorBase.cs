@@ -2,8 +2,8 @@
 
 namespace FileOps.Core.Operations;
 
-internal abstract class FileOperationExecutorBase<TFileOperationConfiguration>(OperationLedger operationLedgerEntries, IFileProvider fileProvider, 
-    IDirectoryOperation directoryOperation, Operation operation) : OperationExecutorBase<TFileOperationConfiguration>(operationLedgerEntries, operation)
+internal abstract class FileOperationExecutorBase<TFileOperationConfiguration>(IFileProvider fileProvider, 
+    IDirectoryOperation directoryOperation, Operation operation) : OperationExecutorBase<TFileOperationConfiguration>(operation)
     where TFileOperationConfiguration : IFileTransferOperationConfiguration
 {
     protected IFileProvider FileProvider => fileProvider;
