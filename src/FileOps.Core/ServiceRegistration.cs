@@ -7,18 +7,18 @@ namespace FileOps.Core;
 
 public static class ServiceRegistration
 {
-    internal static IServiceCollection AddInternalServices(this IServiceCollection services, string rootPath, params Assembly[] assemblies)
+    internal static IServiceCollection AddInternalServices(
+        this IServiceCollection services, params Assembly[] assemblies)
     {
         return services
             .AddSingleton<IDirectoryOperation, FileSystemDirectoryOperation>()
             .AddSingleton<IFileOperation, FileSystemOperation>()
-            .AddSingleton<IFileProvider, PhysicalFileProvider>(s => new PhysicalFileProvider(rootPath))
+            .AddSingleton<IFileProvider, FileSystemProvider>(s => new())
             .Scan(s => s.FromAssemblies(assemblies).AddClasses(a => a.WithAttribute<ServiceDescriptorAttribute>())
             .AsImplementedInterfaces());
     }
 
     public static IServiceCollection RegisterServices(this IServiceCollection services, 
-        string rootPath,
         IEnumerable<Assembly>? assemblies = null,
         MediatRServiceConfiguration? mediatRServiceConfiguration = null)
     {
@@ -36,13 +36,15 @@ public static class ServiceRegistration
 
         if(mediatRServiceConfiguration != null)
         {
-            mediatRServiceConfiguration.RegisterServicesFromAssembly(thisAssembly);
+            mediatRServiceConfiguration
+                .RegisterServicesFromAssembly(thisAssembly);
         }
         else
         {
             services
-                .AddInternalServices(rootPath, assemblies.ToArray())
-                .AddMediatR(c => c.RegisterServicesFromAssemblies(assemblies.ToArray()));
+                .AddInternalServices(assemblies.ToArray())
+                .AddMediatR(c => c.RegisterServicesFromAssemblies(
+                    assemblies.ToArray()));
         }
 
         return services;
