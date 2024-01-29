@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FileOps": {
+      "commandName": "Project",
+      "commandLineArgs": "--file-name test.json"
+    }
+  }
+}

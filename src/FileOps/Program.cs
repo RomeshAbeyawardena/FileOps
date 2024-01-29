@@ -11,7 +11,7 @@ using var cancellationTokenRegistration = new CancellationTokenRegistration();
 var cancellationToken = cancellationTokenRegistration.Token;
 
 ApplicationConfiguration applicationConfiguration = new();
-applicationConfiguration.Parse(ArgumentParser.GetParameters(args));
+applicationConfiguration.Parse(ArgumentParser.GetParameters(args, false));
 
 var serviceConfiguration = new ServiceCollection().RegisterServices(new[] {
     typeof(Program).Assembly
