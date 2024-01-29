@@ -12,4 +12,12 @@
   <ItemGroup>
     <ProjectReference Include="..\FileOps.Core\FileOps.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Shared">
+      <HintPath>..\..\..\Shared\Shared.Console\bin\Debug\net8.0\Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="Shared.Console">
+      <HintPath>..\..\..\Shared\Shared.Console\bin\Debug\net8.0\Shared.Console.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>
