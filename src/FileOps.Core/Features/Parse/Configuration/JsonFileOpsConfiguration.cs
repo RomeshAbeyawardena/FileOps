@@ -20,8 +20,7 @@ internal record JsonFileOpsConfiguration : IFileOpsConfiguration
     {
         options = GetDefault(options);
 
-        var config =  json.Deserialize<JsonFileOpsConfiguration>(options);
-        return config;
+        return json.Deserialize<JsonFileOpsConfiguration>(options);
     }
 
     public string? RootPath { get; set; }
