@@ -20,4 +20,9 @@
       <HintPath>..\..\..\Shared\Shared.Console\bin\Debug\net8.0\Shared.Console.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Include.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

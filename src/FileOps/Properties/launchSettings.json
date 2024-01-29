@@ -2,7 +2,7 @@
   "profiles": {
     "FileOps": {
       "commandName": "Project",
-      "commandLineArgs": "--file-name test.json"
+      "commandLineArgs": "--file-name Include.json"
     }
   }
 }

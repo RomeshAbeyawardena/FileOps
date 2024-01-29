@@ -7,14 +7,11 @@ internal record JsonFileOpsConfiguration : IFileOpsConfiguration
 {
     public static JsonSerializerOptions GetDefault(JsonSerializerOptions? options = null)
     {
-        var opts = options == null 
-            ? new JsonSerializerOptions() 
-            : new JsonSerializerOptions(options)
-        {
-            PropertyNameCaseInsensitive = true
-        };
+        var opts = options ?? new JsonSerializerOptions();
 
+        opts.PropertyNameCaseInsensitive = true;
         opts.Converters.Add(new JsonStringEnumConverter());
+
         return opts;
     }
 
@@ -23,7 +20,8 @@ internal record JsonFileOpsConfiguration : IFileOpsConfiguration
     {
         options = GetDefault(options);
 
-        return json.Deserialize<JsonFileOpsConfiguration>(options);
+        var config =  json.Deserialize<JsonFileOpsConfiguration>(options);
+        return config;
     }
 
     public string? RootPath { get; set; }
