@@ -4,13 +4,13 @@ namespace FileOps.Core.Features.Process;
 
 internal interface IOperationExecutorMapper
 {
-    IEnumerable<OperationExecutorMapping> GetOperators(IFileOpsConfiguration configuration);
+    IEnumerable<OperationExecutorMapping> GetMappings(IFileOpsConfiguration configuration);
 }
 
 
 internal class OperationExecutorMapper(IEnumerable<IOperationExecutor> operationExecutors) : IOperationExecutorMapper
 {
-    public IEnumerable<OperationExecutorMapping> GetOperators(IFileOpsConfiguration configuration)
+    public IEnumerable<OperationExecutorMapping> GetMappings(IFileOpsConfiguration configuration)
     {
         var executorMappingList = new List<OperationExecutorMapping>();
         foreach(var executor in operationExecutors)

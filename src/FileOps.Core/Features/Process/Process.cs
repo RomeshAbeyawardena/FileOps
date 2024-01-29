@@ -14,7 +14,7 @@ internal class Process(IOperationExecutorMapper operationProcessor) : IRequestHa
         }
 
         var operators = operationProcessor
-            .GetOperators(request.Configuration);
+            .GetMappings(request.Configuration);
         
         foreach(var @operator in operators)
         {
