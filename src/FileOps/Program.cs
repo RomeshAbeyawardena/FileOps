@@ -7,7 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using var cancellationTokenRegistration = new CancellationTokenRegistration();
 var cancellationToken = cancellationTokenRegistration.Token;
 
-var serviceConfiguration = new ServiceCollection().RegisterServices(new[] { typeof(Program).Assembly });
+var path = Environment.CurrentDirectory;
+
+var serviceConfiguration = new ServiceCollection().RegisterServices(path, new[] { typeof(Program).Assembly });
 var services = serviceConfiguration.BuildServiceProvider();
 var mediator = services.GetRequiredService<IMediator>();
 var parsedResult = await mediator.Send(new ParseCommand { }, cancellationToken);
