@@ -1,6 +1,6 @@
 ﻿namespace FileOps.Core;
 
-internal enum DirectoryResolution
+public enum DirectoryResolution
 {
     CreateDirectories,
     UseExisting

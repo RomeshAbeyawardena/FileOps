@@ -1,6 +1,15 @@
 ﻿using FileOps.Core;
+using FileOps.Core.Features.Parse;
+using FileOps.Core.Features.Process;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 
-var op = new FileSystemDirectoryOperation();
-var r = await op.CreateDirectoryAsync("C:\\Dev\\ext\\pvt\\FileOps\\test", CancellationToken.None);
+using var cancellationTokenRegistration = new CancellationTokenRegistration();
+var cancellationToken = cancellationTokenRegistration.Token;
 
-Console.WriteLine(r);
+var serviceConfiguration = new ServiceCollection().RegisterServices(new[] { typeof(Program).Assembly });
+var services = serviceConfiguration.BuildServiceProvider();
+var mediator = services.GetRequiredService<IMediator>();
+var parsedResult = await mediator.Send(new ParseCommand { }, cancellationToken);
+
+var processedResult = await mediator.Send(new ProcessCommand {  }, cancellationToken);

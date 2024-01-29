@@ -1,13 +1,13 @@
 ﻿namespace FileOps.Core;
 
-internal enum  Operation
+public enum  Operation
 {
     Copy,
     Move,
     Verify
 }
 
-internal interface IOperationConfiguration
+public interface IOperationConfiguration
 {
     Operation Operation { get; }
     DirectoryResolution DirectoryResolution { get; }

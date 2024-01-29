@@ -1,6 +1,6 @@
 ﻿namespace FileOps.Core;
 
-internal enum PathResolution
+public enum PathResolution
 {
     Absolute,
     Relative

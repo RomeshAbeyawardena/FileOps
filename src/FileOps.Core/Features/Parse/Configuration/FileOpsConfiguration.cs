@@ -1,6 +1,6 @@
 ﻿namespace FileOps.Core;
 
-internal interface IFileOpsConfiguration
+public interface IFileOpsConfiguration
 {
     string? RootPath { get; set; }
     IEnumerable<IFileTransferOperationConfiguration>? Move { get; set; }

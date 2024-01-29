@@ -1,5 +1,8 @@
-﻿namespace FileOps.Core.Operations;
+﻿using Scrutor;
 
+namespace FileOps.Core.Operations;
+
+[ServiceDescriptor]
 internal class VerifyOperationExecutor() : OperationExecutorBase<VerifyOperationConfiguration>(Operation.Verify)
 {
     public override async Task Execute(VerifyOperationConfiguration configuration, CancellationToken cancellationToken)

@@ -1,6 +1,6 @@
 ﻿namespace FileOps.Core;
 
-internal interface IValidationOperationConfiguration : IFileOperationConfiguration
+public interface IValidationOperationConfiguration : IFileOperationConfiguration
 {
     bool Exists { get; }
 }

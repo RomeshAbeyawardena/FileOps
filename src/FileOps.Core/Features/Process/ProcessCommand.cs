@@ -2,7 +2,7 @@
 
 namespace FileOps.Core.Features.Process;
 
-internal record ProcessCommand : IRequest<OperationLedger>
+public record ProcessCommand : IRequest<OperationLedger>
 {
     public IFileOpsConfiguration? Configuration { get; set; }
 }

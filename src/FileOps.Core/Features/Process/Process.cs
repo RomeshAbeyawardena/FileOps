@@ -13,12 +13,12 @@ internal class Process(IOperationProcessor operationProcessor) : IRequestHandler
             throw new NullReferenceException();
         }
 
-        var ops = operationProcessor
+        var operators = operationProcessor
             .GetOperators(request.Configuration);
         
-        foreach(var op in ops)
+        foreach(var @operator in operators)
         {
-            await op.ExecuteAll(operationLedger, cancellationToken);
+            await @operator.ExecuteAll(operationLedger, cancellationToken);
         }
 
         return operationLedger;

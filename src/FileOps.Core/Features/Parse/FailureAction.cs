@@ -1,7 +1,7 @@
 ﻿namespace FileOps.Core;
 
 [Flags]
-internal enum FailureAction
+public enum FailureAction
 {
     AbortOnError,
     LogError,

@@ -1,12 +1,15 @@
 ﻿using Microsoft.Extensions.FileProviders;
+using Scrutor;
 
 namespace FileOps.Core.Operations;
 
+[ServiceDescriptor]
 internal class CopyOperationExecutor(IFileProvider fileProvider, IDirectoryOperation directoryOperation, IFileOperation fileOperation) : FileOperationExecutorBase<CopyOperationConfiguration>( 
     fileProvider, directoryOperation,
     Operation.Copy)
 {
-    protected override async ValueTask<bool> ProcessFile(IFileTransferOperationConfiguration operationConfiguration, string destination, IFileInfo file, CancellationToken cancellationToken)
+    protected override async ValueTask<bool> ProcessFile(IFileTransferOperationConfiguration operationConfiguration, 
+        string destination, IFileInfo file, CancellationToken cancellationToken)
     {
         if(file.PhysicalPath == null)
         {
