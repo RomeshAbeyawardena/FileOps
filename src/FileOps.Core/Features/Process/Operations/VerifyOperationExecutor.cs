@@ -1,19 +1,21 @@
 ﻿using Scrutor;
+using System.Linq;
 
 namespace FileOps.Core.Operations;
 
 [ServiceDescriptor]
-internal class VerifyOperationExecutor() : OperationExecutorBase<VerifyOperationConfiguration>(Operation.Verify)
+internal class VerifyOperationExecutor(IDirectoryOperation directoryOperation,
+    IFileOperation fileOperation) : OperationExecutorBase<VerifyOperationConfiguration>(Operation.Verify)
 {
     public override async Task Execute(VerifyOperationConfiguration configuration, CancellationToken cancellationToken)
     {
         try
         {
             if (configuration.PathResolution == PathResolution.Relative 
-                && string.IsNullOrWhiteSpace(configuration.RootPath) 
-                || !Directory.Exists(configuration.RootPath))
+                && (string.IsNullOrWhiteSpace(configuration.RootPath) 
+                || !await directoryOperation.ExistsAsync(configuration.RootPath, cancellationToken)))
             {
-                throw new DirectoryNotFoundException($"Root path not found: {configuration.RootPath} when path resolution is relative");
+                throw new DirectoryNotFoundException($"Root path not specified or found: {configuration.RootPath} when path resolution is relative");
             }
 
             if (configuration.Files == null)
@@ -21,12 +23,13 @@ internal class VerifyOperationExecutor() : OperationExecutorBase<VerifyOperation
                 throw new NullReferenceException("No files to process");
             }
 
-            var files = configuration.PathResolution == PathResolution.Absolute
-                ? configuration.Files.Where(f => !File.Exists(f))
-                : configuration.Files!.Where(f => !File.Exists(
-                    Path.Combine(configuration.RootPath, f)));
 
-            if (files.Any())
+            var files = configuration.PathResolution == PathResolution.Absolute
+                ? configuration.Files!.ToAsyncEnumerable().WhereAwaitWithCancellation(fileOperation.ExistsAsync)
+                : configuration.Files!.ToAsyncEnumerable().WhereAwaitWithCancellation((f,c) => fileOperation.ExistsAsync(
+                    Path.Combine(configuration.RootPath!, f), c));
+
+            if (await files.AnyAsync(cancellationToken))
             {
                 throw new FileNotFoundException($"The following files could not be found: ${string.Join(',', files)}");
             }

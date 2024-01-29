@@ -29,7 +29,7 @@ internal abstract class FileOperationExecutorBase<TFileOperationConfiguration>(I
             if (configuration.DirectoryResolution == DirectoryResolution.CreateDirectories
                 && !await directoryOperation.ExistsAsync(toPath, cancellationToken))
             {
-                Directory.CreateDirectory(toPath);
+                await directoryOperation.CreateDirectoryAsync(toPath, cancellationToken);
             }
 
             if (configuration.Files == null)

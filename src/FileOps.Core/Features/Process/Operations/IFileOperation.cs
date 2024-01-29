@@ -5,7 +5,7 @@ namespace FileOps.Core;
 
 public interface IFileOperation
 {
-    Task<bool> ExistsAsync(string path, CancellationToken cancellationToken);
+    ValueTask<bool> ExistsAsync(string path, CancellationToken cancellationToken);
     Task<IFileInfo> CopyFileAsync(IFileInfo fileInfo, string newFilePath, CancellationToken cancellationToken, bool overwrite = false);
     Task<IFileInfo> MoveFileAsync(IFileInfo fileInfo, string newFilePath, CancellationToken cancellationToken, bool overwrite = false);
 }
@@ -26,9 +26,9 @@ public class FileSystemOperation : IFileOperation
             new PhysicalFileInfo(new FileInfo(newFilePath)));
     }
 
-    public Task<bool> ExistsAsync(string path, CancellationToken cancellationToken)
+    public ValueTask<bool> ExistsAsync(string path, CancellationToken cancellationToken)
     {
-        return Task.FromResult(File.Exists(path));
+        return ValueTask.FromResult(File.Exists(path));
     }
 
     public Task<IFileInfo> MoveFileAsync(IFileInfo fileInfo, string newFilePath, CancellationToken cancellationToken, bool overwrite = false)
