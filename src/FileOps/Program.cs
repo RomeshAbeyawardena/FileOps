@@ -20,19 +20,15 @@ var serviceConfiguration = new ServiceCollection().RegisterServices(new[] {
 var services = serviceConfiguration.BuildServiceProvider();
 var mediator = services.GetRequiredService<IMediator>();
 
-var fileName = args.FirstOrDefault();
-if (!string.IsNullOrWhiteSpace(fileName))
+if (!string.IsNullOrWhiteSpace(applicationConfiguration.FileName))
 {
-    throw new NullReferenceException($"File '{fileName}' not found");
+    throw new NullReferenceException($"File '{applicationConfiguration.FileName}' not found");
 }
-
-args.ElementAtOrDefault(1);
-
-
 
 var fileOpsConfiguration = await mediator.Send(new ParseCommand
 {
-    FileName = fileName
+    FileName = applicationConfiguration.FileName,
+    Json = applicationConfiguration.Json
 }, cancellationToken);
 
 var processedResult = await mediator
