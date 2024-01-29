@@ -2,7 +2,7 @@
 
 namespace FileOps.Core.Features.Process;
 
-internal class Process(IOperationProcessor operationProcessor) : IRequestHandler<ProcessCommand, OperationLedger>
+internal class Process(IOperationExecutorMapper operationProcessor) : IRequestHandler<ProcessCommand, OperationLedger>
 {
 
     public async Task<OperationLedger> Handle(ProcessCommand request, CancellationToken cancellationToken)

@@ -2,13 +2,13 @@
 
 namespace FileOps.Core.Features.Process;
 
-internal interface IOperationProcessor
+internal interface IOperationExecutorMapper
 {
     IEnumerable<OperationExecutorMapping> GetOperators(IFileOpsConfiguration configuration);
 }
 
 
-internal class OperationProcessor(IEnumerable<IOperationExecutor> operationExecutors) : IOperationProcessor
+internal class OperationExecutorMapper(IEnumerable<IOperationExecutor> operationExecutors) : IOperationExecutorMapper
 {
     public IEnumerable<OperationExecutorMapping> GetOperators(IFileOpsConfiguration configuration)
     {
