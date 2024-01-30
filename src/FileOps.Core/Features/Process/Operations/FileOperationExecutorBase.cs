@@ -25,7 +25,9 @@ internal abstract class FileOperationExecutorBase<TFileOperationConfiguration>(I
 
             var toPath = configuration.PathResolution == PathResolution.Absolute
                 ? configuration.To
-                : Path.Combine(configuration.RootPath!, configuration.To);
+                : string.IsNullOrWhiteSpace(Configuration?.RootPath) 
+                ? Path.Combine(configuration.RootPath!, configuration.To)
+                : Path.Combine(Configuration.RootPath, configuration.RootPath!, configuration.To);
 
             if (configuration.DirectoryResolution == DirectoryResolution.CreateDirectories
                 && !await directoryOperation.ExistsAsync(toPath, cancellationToken))
