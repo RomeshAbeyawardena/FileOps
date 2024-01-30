@@ -26,8 +26,8 @@ internal abstract class FileOperationExecutorBase<TFileOperationConfiguration>(I
             var toPath = configuration.PathResolution == PathResolution.Absolute
                 ? configuration.To
                 : string.IsNullOrWhiteSpace(Configuration?.RootPath) 
-                ? Path.Combine(configuration.RootPath!, configuration.To)
-                : Path.Combine(Configuration.RootPath, configuration.RootPath!, configuration.To);
+                    ? Path.Combine(configuration.RootPath!, configuration.To)
+                    : Path.Combine(Configuration.RootPath, configuration.RootPath!, configuration.To);
 
             if (configuration.DirectoryResolution == DirectoryResolution.CreateDirectories
                 && !await directoryOperation.ExistsAsync(toPath, cancellationToken))
@@ -43,7 +43,9 @@ internal abstract class FileOperationExecutorBase<TFileOperationConfiguration>(I
             foreach (var file in configuration.Files)
             {
                 var filePath = configuration.PathResolution == PathResolution.Relative
-                    ? Path.Combine(configuration.RootPath!, file)
+                    ? string.IsNullOrWhiteSpace(Configuration?.RootPath) 
+                        ? Path.Combine(configuration.RootPath!, file)
+                        : Path.Combine(Configuration.RootPath, configuration.RootPath!, file)
                     : file;
 
                 var fileInfo = fileProvider.GetFileInfo(filePath);
