@@ -32,7 +32,7 @@ internal class OperationExecutorMapper(IEnumerable<IOperationExecutor> operation
             var applicableConfigurations = allConfiguration.Where(executor.CanExecute);
             if (applicableConfigurations.Any())
             {
-                executorMappingList.Add(new OperationExecutorMapping
+                executorMappingList.Add(new OperationExecutorMapping(configuration)
                 {
                     OperationConfiguration = applicableConfigurations,
                     OperationExecutor = executor

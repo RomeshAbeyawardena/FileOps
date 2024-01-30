@@ -27,6 +27,7 @@ internal abstract class OperationExecutorBase(Operation operation) : IOperationE
         return ValueTask.FromResult(true);
     }
 
+    public IFileOpsConfiguration? Configuration { get; set; }
     public OperationLedger? LedgerEntries { get; set; }
     public Operation Operation { get; } = operation;
     

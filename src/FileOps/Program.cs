@@ -20,9 +20,15 @@ var serviceConfiguration = new ServiceCollection().RegisterServices(new[] {
 var services = serviceConfiguration.BuildServiceProvider();
 var mediator = services.GetRequiredService<IMediator>();
 
-if (string.IsNullOrWhiteSpace(applicationConfiguration.FileName))
+bool hasFileName = string.IsNullOrWhiteSpace(applicationConfiguration.FileName);
+if (hasFileName)
 {
     throw new NullReferenceException($"File '{applicationConfiguration.FileName}' not found");
+}
+
+if(!hasFileName && string.IsNullOrWhiteSpace(applicationConfiguration.Json))
+{
+    throw new NullReferenceException("Must specify either a filename or RAW JSON");
 }
 
 var fileOpsConfiguration = await mediator.Send(new ParseCommand
@@ -31,7 +37,7 @@ var fileOpsConfiguration = await mediator.Send(new ParseCommand
     Json = applicationConfiguration.Json
 }, cancellationToken);
 
-var processedResult = await mediator.Send(new ProcessCommand { Configuration = fileOpsConfiguration },
-    cancellationToken);
+var processedResult = await mediator.Send(new ProcessCommand { 
+    Configuration = fileOpsConfiguration }, cancellationToken);
 
 Console.WriteLine(processedResult);
