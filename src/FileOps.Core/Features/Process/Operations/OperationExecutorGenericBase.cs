@@ -1,7 +1,9 @@
-﻿namespace FileOps.Core.Operations;
+﻿using Shared;
 
-internal abstract class OperationExecutorBase<TOperationConfiguration>(Operation operation)
-    : OperationExecutorBase(operation)
+namespace FileOps.Core.Operations;
+
+internal abstract class OperationExecutorBase<TOperationConfiguration>(Operation operation, IClockProvider clockProvider)
+    : OperationExecutorBase(operation, clockProvider)
     where TOperationConfiguration : IOperationConfiguration
 {
     public override bool CanExecute(IOperationConfiguration configuration)

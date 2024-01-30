@@ -1,7 +1,11 @@
-﻿namespace FileOps.Core.Operations;
+﻿using Shared;
 
-internal abstract class OperationExecutorBase(Operation operation) : IOperationExecutor
+namespace FileOps.Core.Operations;
+
+internal abstract class OperationExecutorBase(Operation operation,
+    IClockProvider clockProvider) : IOperationExecutor
 {
+    protected IClockProvider ClockProvider => clockProvider;
     /// <summary>
     /// 
     /// </summary>
@@ -12,7 +16,7 @@ internal abstract class OperationExecutorBase(Operation operation) : IOperationE
     protected ValueTask<bool> HandleException(IOperationConfiguration configuration, 
         Exception exception, bool succeeded = false)
     {
-        LedgerEntries?.Add(new OperationLedgerEntry
+        LedgerEntries?.Add(new OperationLedgerEntry(clockProvider)
         {
             Configuration = configuration,
             Exception = exception,

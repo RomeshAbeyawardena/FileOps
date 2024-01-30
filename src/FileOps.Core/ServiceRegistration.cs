@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Scrutor;
+using Shared;
 using System.Reflection;
 
 namespace FileOps.Core;
@@ -12,6 +13,8 @@ public static class ServiceRegistration
         this IServiceCollection services, params Assembly[] assemblies)
     {
         return services
+            .AddSingleton(TimeProvider.System)
+            .AddSingleton<IClockProvider, SystemClockProvider>()
             .AddSingleton<IDirectoryOperation, FileSystemDirectoryOperation>()
             .AddSingleton<IFileOperation, FileSystemOperation>()
             .AddSingleton<IFileProvider, FileSystemProvider>()

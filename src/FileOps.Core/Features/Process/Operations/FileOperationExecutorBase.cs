@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.FileProviders;
+using Shared;
 
 namespace FileOps.Core.Operations;
 
 internal abstract class FileOperationExecutorBase<TFileOperationConfiguration>(IFileProvider fileProvider, 
-    IDirectoryOperation directoryOperation, Operation operation) : OperationExecutorBase<TFileOperationConfiguration>(operation)
+    IDirectoryOperation directoryOperation, Operation operation, IClockProvider clockProvider) : OperationExecutorBase<TFileOperationConfiguration>(operation, clockProvider)
     where TFileOperationConfiguration : IFileTransferOperationConfiguration
 {
     protected IFileProvider FileProvider => fileProvider;

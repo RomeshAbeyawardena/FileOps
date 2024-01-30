@@ -1,11 +1,12 @@
 ﻿using Scrutor;
+using Shared;
 using System.Linq;
 
 namespace FileOps.Core.Operations;
 
 [ServiceDescriptor]
 internal class VerifyOperationExecutor(IDirectoryOperation directoryOperation,
-    IFileOperation fileOperation) : OperationExecutorBase<VerifyOperationConfiguration>(Operation.Verify)
+    IFileOperation fileOperation, IClockProvider clockProvider) : OperationExecutorBase<VerifyOperationConfiguration>(Operation.Verify, clockProvider)
 {
     public override async Task Execute(VerifyOperationConfiguration configuration, CancellationToken cancellationToken)
     {
@@ -35,7 +36,7 @@ internal class VerifyOperationExecutor(IDirectoryOperation directoryOperation,
             }
             var exists = true;
             
-            LedgerEntries?.Add(new OperationLedgerEntry
+            LedgerEntries?.Add(new OperationLedgerEntry(ClockProvider)
             {
                 Configuration = configuration,
                 Result = exists == configuration.Exists,

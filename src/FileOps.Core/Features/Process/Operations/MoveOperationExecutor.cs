@@ -1,11 +1,13 @@
 ﻿using Microsoft.Extensions.FileProviders;
 using Scrutor;
+using Shared;
 
 namespace FileOps.Core.Operations;
 
 [ServiceDescriptor]
-internal class MoveOperationExecutor(IFileProvider fileProvider, IDirectoryOperation directoryOperation, IFileOperation fileOperation) : FileOperationExecutorBase<MoveOperationConfiguration>(fileProvider,
-    directoryOperation, Operation.Move)
+internal class MoveOperationExecutor(IFileProvider fileProvider, IDirectoryOperation directoryOperation, IFileOperation fileOperation,
+    IClockProvider clockProvider) : FileOperationExecutorBase<MoveOperationConfiguration>(fileProvider,
+    directoryOperation, Operation.Move, clockProvider)
 {
     protected override async ValueTask<bool> ProcessFile(IFileTransferOperationConfiguration operationConfiguration, string destination, 
         IFileInfo file, CancellationToken cancellationToken)
@@ -21,7 +23,7 @@ internal class MoveOperationExecutor(IFileProvider fileProvider, IDirectoryOpera
                 .MoveFileAsync(file, Path.Combine(destination, file.Name), 
                 cancellationToken, true);
 
-            LedgerEntries?.Add(new OperationLedgerEntry
+            LedgerEntries?.Add(new OperationLedgerEntry(ClockProvider)
             {
                 Configuration = operationConfiguration,
                 Result = movedFileInfo,
@@ -30,7 +32,7 @@ internal class MoveOperationExecutor(IFileProvider fileProvider, IDirectoryOpera
             return true;
         }
 
-        LedgerEntries?.Add(new OperationLedgerEntry
+        LedgerEntries?.Add(new OperationLedgerEntry(ClockProvider)
         {
             Configuration = operationConfiguration,
             Exception = new NullReferenceException($"File '{file.PhysicalPath}' not found")
