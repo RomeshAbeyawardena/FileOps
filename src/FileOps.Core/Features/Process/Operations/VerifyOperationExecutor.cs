@@ -25,10 +25,9 @@ internal class VerifyOperationExecutor(IDirectoryOperation directoryOperation,
             }
 
 
-            var files = configuration.PathResolution == PathResolution.Absolute
-                ? configuration.Files!.ToAsyncEnumerable().WhereAwaitWithCancellation(fileOperation.ExistsAsync)
-                : configuration.Files!.ToAsyncEnumerable().WhereAwaitWithCancellation((f,c) => fileOperation.ExistsAsync(
-                    Path.Combine(configuration.RootPath!, f), c));
+            var files = configuration.Files!.ToAsyncEnumerable()
+                .WhereAwaitWithCancellation((f,c) => fileOperation
+                    .ExistsAsync(ResolvePath(configuration, configuration.RootPath!, f), c));
 
             if (await files.AnyAsync(cancellationToken))
             {

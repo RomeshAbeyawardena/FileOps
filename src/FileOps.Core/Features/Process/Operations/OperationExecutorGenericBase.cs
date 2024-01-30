@@ -1,4 +1,5 @@
 ﻿using Shared;
+using System.Reflection.Metadata.Ecma335;
 
 namespace FileOps.Core.Operations;
 
@@ -6,6 +7,16 @@ internal abstract class OperationExecutorBase<TOperationConfiguration>(Operation
     : OperationExecutorBase(operation, clockProvider)
     where TOperationConfiguration : IOperationConfiguration
 {
+    protected string ResolvePath(TOperationConfiguration configuration, 
+        string rootPath, string path)
+    {
+        return configuration.PathResolution == PathResolution.Absolute
+            ? path
+            : string.IsNullOrWhiteSpace(Configuration?.RootPath)
+                ? Path.Combine(rootPath, path)
+                : Path.Combine(Configuration.RootPath, rootPath, path);
+    }
+
     public override bool CanExecute(IOperationConfiguration configuration)
     {
         return configuration is TOperationConfiguration operationConfiguration
