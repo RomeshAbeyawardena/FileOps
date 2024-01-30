@@ -31,6 +31,7 @@
   ],
   "verify": [
     {
+      "enabled": true,
       "exists": true,
       "rootPath": "JsonExtractor.Web",
       "files": [
