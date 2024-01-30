@@ -20,8 +20,8 @@ var serviceConfiguration = new ServiceCollection().RegisterServices(new[] {
 var services = serviceConfiguration.BuildServiceProvider();
 var mediator = services.GetRequiredService<IMediator>();
 
-bool hasFileName = string.IsNullOrWhiteSpace(applicationConfiguration.FileName);
-if (hasFileName) 
+bool hasFileName = !string.IsNullOrWhiteSpace(applicationConfiguration.FileName);
+if (!hasFileName) 
 {
     throw new NullReferenceException($"File '{applicationConfiguration.FileName}' not found");
 }

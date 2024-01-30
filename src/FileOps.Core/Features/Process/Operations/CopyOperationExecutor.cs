@@ -1,12 +1,14 @@
 ﻿using Microsoft.Extensions.FileProviders;
 using Scrutor;
+using Shared;
 
 namespace FileOps.Core.Operations;
 
 [ServiceDescriptor]
-internal class CopyOperationExecutor(IFileProvider fileProvider, IDirectoryOperation directoryOperation, IFileOperation fileOperation) : FileOperationExecutorBase<CopyOperationConfiguration>( 
+internal class CopyOperationExecutor(IFileProvider fileProvider, IDirectoryOperation directoryOperation, IFileOperation fileOperation,
+    IClockProvider clockProvider) : FileOperationExecutorBase<CopyOperationConfiguration>( 
     fileProvider, directoryOperation,
-    Operation.Copy)
+    Operation.Copy, clockProvider)
 {
     protected override async ValueTask<bool> ProcessFile(IFileTransferOperationConfiguration operationConfiguration, 
         string destination, IFileInfo file, CancellationToken cancellationToken)
@@ -20,7 +22,7 @@ internal class CopyOperationExecutor(IFileProvider fileProvider, IDirectoryOpera
         {
             var copiedFileInfo = await fileOperation.CopyFileAsync(file, Path.Combine(destination, file.Name), cancellationToken, true);
 
-            LedgerEntries?.Add(new OperationLedgerEntry
+            LedgerEntries?.Add(new OperationLedgerEntry(ClockProvider)
             {
                 Configuration = operationConfiguration,
                 Result = copiedFileInfo,
@@ -29,7 +31,7 @@ internal class CopyOperationExecutor(IFileProvider fileProvider, IDirectoryOpera
             return true;
         }
 
-        LedgerEntries?.Add(new OperationLedgerEntry
+        LedgerEntries?.Add(new OperationLedgerEntry(ClockProvider)
         {
             Configuration = operationConfiguration,
             Exception = new NullReferenceException("File not found")
