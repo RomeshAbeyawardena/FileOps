@@ -24,14 +24,14 @@ internal class VerifyOperationExecutor(IDirectoryOperation directoryOperation,
                 throw new NullReferenceException("No files to process");
             }
 
-
             var files = configuration.Files!.ToAsyncEnumerable()
-                .WhereAwaitWithCancellation((f,c) => fileOperation
+                .WhereAwaitWithCancellation(async(f,c) => !await fileOperation
                     .ExistsAsync(ResolvePath(configuration, configuration.RootPath!, f), c));
 
             if (await files.AnyAsync(cancellationToken))
             {
-                throw new FileNotFoundException($"The following files could not be found: ${string.Join(',', files)}");
+                var filesArray = await files.ToArrayAsync(cancellationToken);
+                throw new FileNotFoundException($"The following files could not be found: ${string.Join(',', filesArray)}");
             }
             var exists = true;
             
