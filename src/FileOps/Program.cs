@@ -31,6 +31,7 @@ var fileOpsConfiguration = await mediator.Send(new ParseCommand
     Json = applicationConfiguration.Json
 }, cancellationToken);
 
-var processedResult = await mediator
-    .Send(new ProcessCommand { Configuration = fileOpsConfiguration },
+var processedResult = await mediator.Send(new ProcessCommand { Configuration = fileOpsConfiguration },
     cancellationToken);
+
+Console.WriteLine(processedResult);

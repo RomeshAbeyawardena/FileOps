@@ -1,8 +1,9 @@
 ﻿using System.Collections;
+using System.Text;
 
 namespace FileOps.Core;
 
-internal class OperationLedger : IEnumerable<OperationLedgerEntry>
+public class OperationLedger : IEnumerable<OperationLedgerEntry>
 {
     private readonly IList<OperationLedgerEntry> ledgerEntries;
     
@@ -24,5 +25,15 @@ internal class OperationLedger : IEnumerable<OperationLedgerEntry>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return ledgerEntries.GetEnumerator();
+    }
+
+    public override string ToString()
+    {
+        var stringBuilder = new StringBuilder();
+        foreach(var entry in ledgerEntries) 
+        {
+            stringBuilder.AppendLine(entry.ToString());
+        }
+        return stringBuilder.ToString();
     }
 }

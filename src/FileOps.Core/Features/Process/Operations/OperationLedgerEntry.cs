@@ -1,6 +1,6 @@
 ﻿namespace FileOps.Core;
 
-internal record OperationLedgerEntry
+public record OperationLedgerEntry
 {
     public IOperationConfiguration? Configuration { get; init; }
     public object? Result { get; init; }

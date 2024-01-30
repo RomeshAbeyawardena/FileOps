@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FileOps.Core.Features.Process;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Scrutor;
 using System.Reflection;
@@ -13,7 +14,8 @@ public static class ServiceRegistration
         return services
             .AddSingleton<IDirectoryOperation, FileSystemDirectoryOperation>()
             .AddSingleton<IFileOperation, FileSystemOperation>()
-            .AddSingleton<IFileProvider, FileSystemProvider>(s => new())
+            .AddSingleton<IFileProvider, FileSystemProvider>()
+            .AddSingleton<IOperationExecutorMapper, OperationExecutorMapper>()
             .Scan(s => s.FromAssemblies(assemblies).AddClasses(a => a.WithAttribute<ServiceDescriptorAttribute>())
             .AsImplementedInterfaces());
     }
