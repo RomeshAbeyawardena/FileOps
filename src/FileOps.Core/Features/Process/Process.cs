@@ -10,7 +10,7 @@ internal class Process(IOperationExecutorMapper operationProcessor) : IRequestHa
         var operationLedger = new OperationLedger();
         if(request.Configuration == null)
         {
-            throw new NullReferenceException();
+            throw new NullReferenceException("Configuration not specified");
         }
 
         var operators = operationProcessor

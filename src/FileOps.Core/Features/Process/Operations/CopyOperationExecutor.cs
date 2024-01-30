@@ -32,7 +32,7 @@ internal class CopyOperationExecutor(IFileProvider fileProvider, IDirectoryOpera
         LedgerEntries?.Add(new OperationLedgerEntry
         {
             Configuration = operationConfiguration,
-            Exception = new NullReferenceException("File not found")
+            Exception = new NullReferenceException($"File '{file.PhysicalPath}' not found")
         });
 
         return false;

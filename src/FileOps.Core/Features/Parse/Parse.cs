@@ -14,7 +14,7 @@ internal class Parse(IFileProvider fileProvider) : IRequestHandler<ParseCommand,
             var file = fileProvider.GetFileInfo(request.FileName);
             if (!file.Exists)
             {
-                throw new FileNotFoundException();
+                throw new FileNotFoundException($"{request.FileName}");
             }
 
             using var streamReader = new StreamReader(file.CreateReadStream());
