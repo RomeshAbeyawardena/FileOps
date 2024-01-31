@@ -8,6 +8,16 @@ internal abstract class OperationExecutorBase<TOperationConfiguration>(Operation
     : OperationExecutorBase(operation, clockProvider)
     where TOperationConfiguration : IOperationConfiguration
 {
+    /// <summary>
+    /// Resolves paths based on configuration path rules applied by the configuration and the context
+    /// </summary>
+    /// <param name="configuration">The configuration to validate and build the path from</param>
+    /// <param name="rootPath">The rootpath that makes up the first part of concatenation</param>
+    /// <param name="path">The path to concatenate</param>
+    /// <param name="applicablePathRules">The path rules applied in this given context</param>
+    /// <param name="pathRules">Path rules to check for</param>
+    /// <returns>The resolved path</returns>
+    /// <exception cref="ArgumentException">Thrown when multiple rules are applied to <paramref name="pathRules"/></exception>
     protected string ResolvePath(TOperationConfiguration configuration, 
         string rootPath, string path, PathRules applicablePathRules, PathRules pathRules)
     {
