@@ -26,7 +26,12 @@ internal abstract class OperationExecutorBase<TOperationConfiguration>(Operation
             throw new ArgumentException("Must only specify a single rule");
         }
 
-        var isApplicablePath = applicablePathRules.HasFlag(pathRules);
+        if(pathRules == PathRules.Unspecified)
+        {
+            throw new ArgumentException("Must specify a rule");
+        }
+
+        var isApplicablePath = applicablePathRules.HasFlag(pathRules) || applicablePathRules == PathRules.Unspecified;
         return configuration.PathResolution == PathResolution.Absolute
             ? path
             : string.IsNullOrWhiteSpace(Configuration?.RootPath)
