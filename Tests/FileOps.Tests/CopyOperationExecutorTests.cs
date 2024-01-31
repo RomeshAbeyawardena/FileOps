@@ -2,6 +2,7 @@
 using FileOps.Core.Operations;
 using Microsoft.Extensions.FileProviders;
 using Moq;
+using Shared;
 
 namespace FileOps.Tests;
 
@@ -14,8 +15,9 @@ public class CopyOperationExecutorTests
         var fileProviderMock = new Mock<IFileProvider>();
         var directoryOperationMock = new Mock<IDirectoryOperation>();
         var fileOperationMock = new Mock<IFileOperation>();
+        var clockProviderMock = new Mock<IClockProvider>();
         var ledger = new OperationLedger();
-        var executor = new CopyOperationExecutor(fileProviderMock.Object, directoryOperationMock.Object, fileOperationMock.Object)
+        var executor = new CopyOperationExecutor(fileProviderMock.Object, directoryOperationMock.Object, fileOperationMock.Object, clockProviderMock.Object)
         {
             LedgerEntries = ledger
         };

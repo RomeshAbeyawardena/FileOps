@@ -22,4 +22,10 @@
     <ProjectReference Include="..\..\src\FileOps.Core\FileOps.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Shared">
+      <HintPath>..\..\..\Shared\bin\Debug\net8.0\Shared.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

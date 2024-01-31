@@ -1,6 +1,6 @@
 ﻿using FileOps.Core.Operations;
 
-namespace FileOps.Core.Features.Process;
+namespace FileOps.Core;
 
 internal record OperationExecutorMapping
 {
