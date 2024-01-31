@@ -6,6 +6,7 @@
       "description": "Moves the generated LIC file compiled by the build agent",
       "enabled": true,
       "to": "output",
+      "rootPathRules": "UseForSource",
       "pathResolution": "relative",
       "rootPath": "JsonExtractor.Web",
       "failureAction": "AbortOnError",
@@ -21,6 +22,7 @@
       "enabled": true,
       "to": "wwwroot",
       "pathResolution": "relative",
+      "rootPathRules": "UseForSource",
       "rootPath": "JsonExtractor.Web",
       "failureAction": "SkipFile",
       "files": [
@@ -33,7 +35,9 @@
     {
       "enabled": true,
       "exists": true,
+      "rootPathRules": "UseForSource",
       "rootPath": "JsonExtractor.Web",
+      "failureAction": "SkipFile",
       "files": [
         "AuthorInfo.json",
         "dark-theme.append.txt",

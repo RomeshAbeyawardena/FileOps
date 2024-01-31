@@ -25,4 +25,5 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ProjectExtensions><VisualStudio><UserProperties schema_1json__JsonSchema="http://json-schema.org/draft-07/schema" /></VisualStudio></ProjectExtensions>
 </Project>

@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "rootPath": {
+      "type": "string"
+    },
+    "move": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/operation"
+      }
+    },
+    "copy": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/operation"
+      }
+    },
+    "verify": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/verifyOperation"
+      }
+    }
+  },
+  "definitions": {
+    "operation": {
+      "type": "object",
+      "properties": {
+        "directoryResolution": {
+          "type": "string",
+          "enum": [ "CreateDirectories", "AnotherOption" ] // List all possible values
+        },
+        "description": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "to": {
+          "type": "string"
+        },
+        "pathResolution": {
+          "type": "string",
+          "enum": [ "relative", "absolute" ] // List all possible values
+        },
+        "rootPath": {
+          "type": "string"
+        },
+        "failureAction": {
+          "type": "string",
+          "enum": [ "AbortOnError", "SkipFile" ] // List all possible values
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [ "directoryResolution", "description", "enabled", "to", "pathResolution", "rootPath", "failureAction", "files" ]
+    },
+    "verifyOperation": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "exists": {
+          "type": "boolean"
+        },
+        "rootPath": {
+          "type": "string"
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [ "enabled", "exists", "rootPath", "files" ]
+    }
+  }
+}
