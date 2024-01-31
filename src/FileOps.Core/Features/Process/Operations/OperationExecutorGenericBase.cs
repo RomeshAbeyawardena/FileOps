@@ -12,7 +12,7 @@ internal abstract class OperationExecutorBase<TOperationConfiguration>(Operation
     /// Resolves paths based on configuration path rules applied by the configuration and the context
     /// </summary>
     /// <param name="configuration">The configuration to validate and build the path from</param>
-    /// <param name="rootPath">The rootpath that makes up the first part of concatenation</param>
+    /// <param name="rootPath">The root path that makes up the first part of concatenation</param>
     /// <param name="path">The path to concatenate</param>
     /// <param name="applicablePathRules">The path rules applied in this given context</param>
     /// <param name="pathRules">Path rules to check for</param>
