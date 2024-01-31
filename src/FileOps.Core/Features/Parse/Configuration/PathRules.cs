@@ -1,4 +1,4 @@
-﻿namespace FileOps.Core.Features.Parse;
+﻿namespace FileOps.Core;
 
 [Flags]
 public enum PathRules
