@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using FileOps.Core.Features.Parse;
+using Shared;
 using System.Reflection.Metadata.Ecma335;
 
 namespace FileOps.Core.Operations;
@@ -8,13 +9,20 @@ internal abstract class OperationExecutorBase<TOperationConfiguration>(Operation
     where TOperationConfiguration : IOperationConfiguration
 {
     protected string ResolvePath(TOperationConfiguration configuration, 
-        string rootPath, string path)
+        string rootPath, string path, PathRules applicablePathRules, PathRules pathRules)
     {
+        if(pathRules == PathRules.UseForBoth)
+        {
+            throw new ArgumentException("Must only specify a single rule");
+        }
+
+        var isApplicablePath = applicablePathRules.HasFlag(pathRules);
         return configuration.PathResolution == PathResolution.Absolute
             ? path
             : string.IsNullOrWhiteSpace(Configuration?.RootPath)
-                ? Path.Combine(rootPath, path)
-                : Path.Combine(Configuration.RootPath, rootPath, path);
+                ? isApplicablePath ? Path.Combine(rootPath, path) : path
+                : isApplicablePath ? Path.Combine(Configuration.RootPath, rootPath, path) 
+                    : Path.Combine(Configuration.RootPath, path);
     }
 
     public override bool CanExecute(IOperationConfiguration configuration)

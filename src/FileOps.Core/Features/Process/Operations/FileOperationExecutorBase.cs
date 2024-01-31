@@ -23,7 +23,7 @@ internal abstract class FileOperationExecutorBase<TFileOperationConfiguration>(I
                 throw new NullReferenceException($"Destination {nameof(configuration.To)} not specified");
             }
 
-            var toPath = ResolvePath(configuration, configuration.RootPath!, configuration.To);
+            var toPath = ResolvePath(configuration, configuration.RootPath!, configuration.To, configuration.RootPathRules, Features.Parse.PathRules.UseForTarget);
 
             if (configuration.DirectoryResolution == DirectoryResolution.CreateDirectories
                 && !await directoryOperation.ExistsAsync(toPath, cancellationToken))
@@ -38,7 +38,7 @@ internal abstract class FileOperationExecutorBase<TFileOperationConfiguration>(I
 
             foreach (var file in configuration.Files)
             {
-                var filePath = ResolvePath(configuration, configuration.RootPath!, file);
+                var filePath = ResolvePath(configuration, configuration.RootPath!, file, configuration.RootPathRules, Features.Parse.PathRules.UseForSource);
 
                 var fileInfo = fileProvider.GetFileInfo(filePath);
                 await ProcessFile(configuration, toPath, fileInfo, cancellationToken);

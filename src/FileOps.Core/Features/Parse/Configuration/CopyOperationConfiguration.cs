@@ -1,4 +1,6 @@
-﻿namespace FileOps.Core;
+﻿using FileOps.Core.Features.Parse;
+
+namespace FileOps.Core;
 
 internal record CopyOperationConfiguration : OperationConfigurationBase, IFileTransferOperationConfiguration
 {
@@ -10,4 +12,5 @@ internal record CopyOperationConfiguration : OperationConfigurationBase, IFileTr
     public string? To { get; set; }
     public string? RootPath { get; set; }
     public IEnumerable<string>? Files { get; set; }
+    public PathRules RootPathRules { get; }
 }
